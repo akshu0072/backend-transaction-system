@@ -85,7 +85,7 @@ async function createTransaction(req, res) {
      * 3. Check account status
      */
 
-    if (fromUserAccount.status !== "ACTIVE" || toUserAccount.status !== "ACTIVE") {
+    if (fromUserAccount.status !== "active" || toUserAccount.status !== "active") {
         return res.status(400).json({
             message: "Both fromAccount and toAccount must be ACTIVE to process transaction"
         })
@@ -214,6 +214,10 @@ async function createInitialFundsTransaction(req, res) {
         transaction: transaction._id,
         type: "DEBIT"
     } ], { session })
+
+    await (() => {
+        return new Promise((resolve) => setTimeout(resolve, 15 * 1000));
+    })()
 
     const creditLedgerEntry = await ledgerModel.create([ {
         account: toAccount,
